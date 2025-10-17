@@ -1,7 +1,10 @@
 package calculator
 
-fun main() {
-    // TODO: 프로그램 구현
-    // 시작
+import camp.nextstep.edu.missionutils.Console
 
+fun main() {
+    //입력
+    println("덧셈할 문자열을 입력해주세요.")
+    val input = Console.readLine()
+    StringCalculator().run(input)
 }
