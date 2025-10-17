@@ -45,3 +45,15 @@
 ### 7. 출력(writeOutput)
 
 - 합산을 출력
+
+### 로직
+
+1. 입력을 요구하는 문구 출력 및 입력 (Application.kt)
+2. 입력을 받고 나면 연산으로 이동 (Application.kt -> StringCalculator.kt)
+3. 빈 문자열 여부 파악
+4. 기본 구분자를 기준으로 문자열 분리
+5. 분리된 문자열에서 커스텀 구분자 확인 (최종적으로 모두 분리된 상태)
+6. 양수값인지 파악
+7. 처리 완료한 숫자들을 모두 합산
+8. 출력
+9. 종료 (StringCalculator.kt -> Application.kt)
