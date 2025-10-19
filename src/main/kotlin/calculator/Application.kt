@@ -6,5 +6,6 @@ fun main() {
     //입력
     println("덧셈할 문자열을 입력해주세요.")
     val input = Console.readLine()
-    StringCalculator().run(input)
+    val output = StringCalculator().run(input)
+    print("결과 : $output")
 }
