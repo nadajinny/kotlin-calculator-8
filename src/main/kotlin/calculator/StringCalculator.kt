@@ -32,9 +32,70 @@ class StringCalculator {
                 flushToken() // 선언 전에 숫자 토큰 경계 확정
                 i += 2
 
+
+                val newDelims = mutableListOf<String>()
+
+                if (i < input.length && input[i] == '[') {
+                    // //[...][...] 다중 구분자 일 경우
+                    while (i < input.length && input[i] == '[') {
+                        val end = input.indexOf(']', i)
+                        if (end < 0) throw IllegalArgumentException("구분자 선언 오류: ']' 누락")
+                        val d = input.substring(i + 1, end)
+                        if (d.isEmpty()) throw IllegalArgumentException("구분자가 비어 있습니다")
+                        newDelims.add(d)
+                        i = end + 1
+                    }
+                } else {
+                    // //; 단일 구분자 일 경우
+                    if (i >= input.length) throw IllegalArgumentException("구분자 선언이 비었습니다")
+                    newDelims.add(input[i].toString())
+                    i++
+                }
+
+                // '\n'로 닫혔는지 확인
+                when {
+                    i + 1 < input.length && input.startsWith("\\n", i) -> {
+                        i += 2
+                    }
+                    i < input.length && input[i] == '\n' -> {
+                        i++
+                    }
+                    else -> {
+                        throw IllegalArgumentException("구분자 선언 뒤에는 개행(\\n)이 필요합니다")
+                    }
+                }
+
+                // 구분자 추가 및 긴 구분자 우선 매칭
+                spliter.addAll(newDelims)
+                spliter.sortByDescending { it.length }
+                continue
+            }
+
+            // 2) 현재 구분자 매칭
+            var matched: String? = null
+            for (d in spliter) {
+                if (
+                    d.isNotEmpty() &&
+                    i + d.length <= input.length &&
+                    input.regionMatches(i, d, 0, d.length)
+                ) {
+                    matched = d
+                    break
+                }
+            }
+
+            if (matched != null) {
+                flushToken()
+                i += matched.length
+                continue
+            }
+
+            // 3) 일반 문자 → 숫자 누적
+            current.append(input[i])
+            i++
         }
 
-        // 입력 종료 후 남은 토큰 확정
+        // 입력 종료 후 마지막 토큰 확정
         flushToken()
 
         return add(numberlist)
